@@ -1,70 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-  </script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-  </script>
+  <title>Google Imagenes</title>
+  <?php require_once "dependencias.php"; ?>
+  <?php require_once "contenidos.php"; 
+        $datos=contenido();
+  ?>
 </head>
-<body>
+<body style="background-color: #343a40;color: white">
   <div class="container">
-    <h2>Indice de Masa Corporal</h2>
-    <div class="row">
-      <div class="col-sm-4">
-        <form class="" action="obtenerDatos.php" method="POST">
-          <label>Peso</label>
-          <input type="text" name="peso" placeholder=" ingresa tu peso" class="from-control">
-          <br>
-          <label>Altura</label>
-          <input type="text" name="altura"placeholder=" ingresa tu altura" class="from-control">
-          <br>
-          <button class="btn btn-danger">Enviar</button>
-          <br>
-        </form>
-      </div>
-    </div>
-  </div>
+  <h1>presentacion de Imagenes Tipo Google</h1>
+  <h2>Mangas romanticos</h2>
+  
+	<ul class="gridder">
+		<?php 
+		for ($i=0; $i < count($datos) ; $i++):
+			$d=explode("||", $datos[$i]);
+
+			?>
+			<li class="gridder-list" 
+			data-griddercontent="<?php echo '#gridder-content-'.$i ?>">
+				<img src="<?php echo $d[0] ?>">
+			</li>
+
+			<?php
+		endfor;  
+		?>
+	</ul>
+
+	<?php
+		for ($i=0; $i < count($datos); $i++):
+		  	$d=explode("||", $datos[$i]);  
+	?>
+		<div id="<?php echo 'gridder-content-'.$i; ?>" class="gridder-content" >
+			<div class="row">
+				<div class="col-sm-6">
+					<img src="<?php echo $d[0] ?>" class="img-responsive" />
+				</div>
+				<div class="col-sm-6">
+					<h2><?php echo $d[1]; ?></h2>
+					<p><?php echo $d[2]; ?></p>
+				</div>
+			</div>
+		</div>
+	<?php  
+		endfor;
+		?>
+</div>
 </body>
 </html>
-<?php
-$peso=$_POST['peso'];
-$altura=$_POST['altura'];
-//convertir cm a m
-$altu = $altura/100;
-//IMC = Peso(kg)/altura*2(m)
-$imc = $peso/($altura*$altura);
 
-if ($imc>40) {
-  echo "Tu IMC es: ".$imc."Tu Diagnostico es: Problema de Obesidad Tipo III";
- 
-} else if ($imc>39.99) {
-  echo "Tu IMC es: ".$imc."Tu Diagnostico es: Problema de Obesidad Tipo II";
- 
-}else if ($imc>29.99) {
-  echo "Tu IMC es: ".$imc."Tu Diagnostico es: Problema de Obesidad Tipo I";
-}else if ($imc>27.00) {
-  echo "Tu IMC es: ".$imc."Tu Diagnostico es: Problema de Obesidad";
-}else if ($imc>26.99) {
-  echo "Tu IMC es: ".$imc."Tu Diagnostico es: Problema de sobre peso";
- 
- }else if ($imc>24.99) {
-  echo"Tu IMC es: ".$imc."Tu Diagnostico es: Peso Normal";
-  
-}else if ($imc>18.00) {
-  echo"Tu IMC es: ".$imc."Tu Diagnostico es: Problema de Peso Bajo"; 
-}else {
-  echo"Tu IMC es: ".$imc."Tu Diagnostico es: Algo salio mal";
-  }
-  ?>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".gridder").gridderExpander({
+			scroll: true,
+			scrollOffset: 60,
+                    scrollTo: "listitem", // panel or listitem
+                    animationSpeed: 100,
+                    animationEasing: "easeInOutExpo",
+                    showNav: true,
+                    nextText: "<i class=\"fa fa-arrow-right\"></i>",
+                    prevText: "<i class=\"fa fa-arrow-left\"></i>",
+                    closeText: "<i class=\"fa fa-times\"></i>",
+                    onStart: function () {
+                    	console.log("Gridder Inititialized");
+                    },
+                    onContent: function () {
+                    	console.log("Gridder Content Loaded");
+                    	$(".carousel").carousel();
+                    },
+                    onClosed: function () {
+                    	console.log("Gridder Closed");
+                    }
+                });
+	});
+</script>
